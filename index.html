@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaraX.ai — Post-Signup Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --bg-body: #f8fafc;
+            --bg-white: #ffffff;
+            --border-light: #e2e8f0;
+            --brand-dark: #0f172a;
+            --accent-blue: #2563eb;
+            --accent-green: #10b981;
+            --bg-sidebar: #0f172a;
+            --text-sidebar: #94a3b8;
+            --text-sidebar-hover: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            color: white;
+            padding: 32px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-brand {
+            padding: 0 32px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-brand img {
+            width: 120px;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-brand h2 {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--text-sidebar);
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 32px;
+            color: var(--text-sidebar);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-sidebar-hover);
+            border-left-color: var(--accent-blue);
+        }
+
+        .nav-section {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #475569;
+            padding: 0 32px;
+            margin: 32px 0 12px;
+        }
+
+        /* Main Content area */
+        .main-content {
+            margin-left: 280px;
+            padding: 64px 80px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-banner {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--brand-dark);
+            margin-bottom: 56px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 64px;
+            color: white;
+            width: 100%;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-content h1 {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: #cbd5e1;
+            font-weight: 400;
+            max-width: 600px;
+        }
+
+        /* Context Block */
+        .context-block {
+            padding: 40px;
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            margin-bottom: 64px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .context-metric {
+            text-align: center;
+            padding: 32px;
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+
+        .context-metric .value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            line-height: 1;
+            margin-bottom: 8px;
+            letter-spacing: -2px;
+        }
+
+        .context-metric .label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .context-text h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--brand-dark);
+        }
+
+        .context-text p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .context-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Module Cards */
+        .module-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .module-card {
+            background: var(--bg-white);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            scroll-margin-top: 40px;
+            display: grid;
+            grid-template-columns: 5fr 4fr;
+        }
+
+        .module-logic {
+            padding: 48px;
+            border-right: 1px solid var(--border-light);
+        }
+
+        .module-header {
+            margin-bottom: 32px;
+        }
+
+        .module-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .module-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .logic-row {
+            margin-bottom: 24px;
+        }
+
+        .logic-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .logic-content {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .logic-content strong {
+            color: var(--brand-dark);
+        }
+
+        .brain-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .brain-box h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--brand-dark);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brain-box p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .module-action {
+            padding: 48px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .preview-snippet {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .preview-snippet::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            border-width: 0 12px 12px 12px;
+            border-style: solid;
+            border-color: transparent transparent var(--border-light) transparent;
+        }
+
+        .preview-snippet::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 24px;
+            border-width: 0 12px 12px 12px;
+            border-style: solid;
+            border-color: transparent transparent var(--bg-white) transparent;
+        }
+
+        .snippet-subject {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--brand-dark);
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .snippet-body {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-family: monospace;
+            line-height: 1.5;
+        }
+
+        .btn-view {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--brand-dark);
+            color: white;
+            text-decoration: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-view:hover {
+            background: var(--accent-blue);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Branding Overrides */
+        .color-blue {
+            color: var(--accent-blue);
+        }
+
+        .color-green {
+            color: var(--accent-green);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <img src="assets/3c2b72c9-f716-47e3-a051-6b3567fb063a.png" alt="KaraX.ai">
+                <h2>Post-Signup Engine</h2>
+            </div>
+
+            <div class="nav-section">Foundation</div>
+            <a href="#context" class="nav-item">Document Overview</a>
+
+            <div class="nav-section">Execution Sequence</div>
+            <a href="#module-1" class="nav-item">01. Activation Push</a>
+            <a href="#module-2" class="nav-item">02. Feature Expansion</a>
+            <a href="#module-3" class="nav-item">03. Monetization Trigger</a>
+            <a href="#module-4" class="nav-item">04. Re-engagement</a>
+            <a href="#module-5" class="nav-item">05. The Winback</a>
+            <a href="#module-6" class="nav-item">06. Loyalty Framework</a>
+        </nav>
+
+        <main class="main-content">
+
+            <!-- Hero Section -->
+            <div class="hero-banner">
+                <video src="assets/uri_ifs___V_EJX2pJcHJQc8oGLl2grgpSif58jlskyAQbLAqbVditc.mp4" autoplay loop muted
+                    playsinline class="hero-video"></video>
+                <div class="hero-content">
+                    <span class="badge">Internal Framework • Validated</span>
+                    <h1>Retention Architecture</h1>
+                    <p>Engineering psychological leverage to transform raw signups into habitual, automated user
+                        execution.</p>
+                </div>
+            </div>
+
+            <!-- Document Overview Block -->
+            <div id="context" class="context-block">
+                <div class="context-metric" style="background: transparent; padding: 0; text-align: left;">
+                    <h4
+                        style="font-size: 14px; font-weight: 700; color: var(--brand-dark); margin-bottom: 16px; text-transform: uppercase;">
+                        Included Features</h4>
+                    <ul
+                        style="list-style: none; padding: 0; margin: 0; font-size: 15px; color: var(--text-secondary); line-height: 2;">
+                        <li><span class="color-blue">■</span> 6 Modular Sequences</li>
+                        <li><span class="color-blue">■</span> Psychological Logic</li>
+                        <li><span class="color-blue">■</span> Trigger Conditions</li>
+                        <li><span class="color-blue">■</span> Production-Ready Templates</li>
+                    </ul>
+                </div>
+                <div class="context-text">
+                    <h3>About This Architecture Document</h3>
+                    <p>This document serves as the central strategic blueprint and actionable repository for the
+                        <strong>KaraX.ai Post-Signup Email Engine</strong>.
+                    </p>
+                    <p><strong>Why does this exist?</strong> To map exactly how KaraX communicates with its users from
+                        the moment they sign up to deep into their paid retention phase. This strategy uses precise
+                        behavioral triggers (like 30-minute inactivity or 5th task completion) to deliver clean,
+                        highly-targeted, human-sounding emails. By bypassing traditional "marketing blasts," we
+                        establish an invisible, high-value ecosystem orchestrator.</p>
+                    <p>Below, you will find 6 defined logic modules. Each module explains <em>when</em> to trigger the
+                        communication, <em>why</em> it is necessary from a behavioral standpoint, and provides a direct
+                        link to preview the production-verified, minimalist HTML template.</p>
+                </div>
+            </div>
+
+            <div class="module-grid">
+                <div id="module-1" class="module-card">
+                    <div class="module-logic">
+                        <div class="module-header">
+                            <div class="module-number">Sequence 01</div>
+                            <h2 class="module-title">The Activation Push</h2>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Trigger Condition</div>
+                            <div class="logic-content">Exactly <strong>30 minutes post-signup</strong>, if zero
+                                workloads have been executed.</div>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Strategic Objective</div>
+                            <div class="logic-content">Bypass UI friction. Give them a direct link to initiate their
+                                first automation output.</div>
+                        </div>
+
+                        <div class="brain-box">
+                            <h4>Friction Reduction & The Zeigarnik Effect</h4>
+                            <p>Users remember incomplete loops (signing up but doing nothing). Instead of sending a
+                                heavy "Welcome Tutorial", we lower the barrier to zero. We ask for one single
+                                problem to
+                                solve in 60 seconds.</p>
+                        </div>
+                    </div>
+                    <div class="module-action">
+                        <div class="preview-snippet">
+                            <div class="snippet-subject">Let's get your first task done in 60 seconds</div>
+                            <div class="snippet-body">
+                                The easiest way to see what we can do? Let us take one active problem off your plate
+                                right now. Tell KaraX what you need...
+                            </div>
+                        </div>
+                        <a href="email_templates/1_activation_push.html" target="_blank" class="btn-view">View Full
+                            Template &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- MODULE 2 -->
+                <div id="module-2" class="module-card">
+                    <div class="module-logic">
+                        <div class="module-header">
+                            <div class="module-number">Sequence 02</div>
+                            <h2 class="module-title">Feature Expansion</h2>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Trigger Condition</div>
+                            <div class="logic-content"><strong>T+24 Hours</strong>. User ran exactly 1 command, but
+                                didn't return.</div>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Strategic Objective</div>
+                            <div class="logic-content">Shift user perception from "basic chatbot" to "deep workflow
+                                assistant".</div>
+                        </div>
+
+                        <div class="brain-box">
+                            <h4>Curiosity Gap & Paradigm Shift</h4>
+                            <p>We validate their fast win yesterday, anchoring the value. Then, we casually
+                                introduce
+                                advanced enterprise capabilities (meeting ingestion, multi-app control) without
+                                sounding
+                                like a desperate salesman.</p>
+                        </div>
+                    </div>
+                    <div class="module-action">
+                        <div class="preview-snippet">
+                            <div class="snippet-subject">Your first action is complete. What's next?</div>
+                            <div class="snippet-body">
+                                Yesterday, you successfully ran your first command. Now that you know how fast it
+                                executes, you should know we do a lot more...
+                            </div>
+                        </div>
+                        <a href="email_templates/2_feature_expansion.html" target="_blank" class="btn-view">View
+                            Full
+                            Template &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- MODULE 3 -->
+                <div id="module-3" class="module-card">
+                    <div class="module-logic">
+                        <div class="module-header">
+                            <div class="module-number">Sequence 03</div>
+                            <h2 class="module-title">Monetization Trigger</h2>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Trigger Condition</div>
+                            <div class="logic-content">Fires immediately upon completion of their <strong>5th
+                                    workflow</strong>.</div>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Strategic Objective</div>
+                            <div class="logic-content">Convert free momentum into MRR by leveraging automated
+                                capacity
+                                running in the background.</div>
+                        </div>
+
+                        <div class="brain-box">
+                            <h4>Data-Driven ROI Framing</h4>
+                            <p>Instead of selling a "Pro Plan", we sell their own time back to them based on exact
+                                backend data (`{{hours_saved}}`). Moving from manual triggers to silent background
+                                automation is highly logical.</p>
+                        </div>
+                    </div>
+                    <div class="module-action">
+                        <div class="preview-snippet">
+                            <div class="snippet-subject">You just saved {hours_saved} hours this week.</div>
+                            <div class="snippet-body">
+                                Right now, you're triggering these tasks manually. Our Pro users just set the rules
+                                once, and KaraX executes them silently...
+                            </div>
+                        </div>
+                        <a href="email_templates/3_monetization_trigger.html" target="_blank" class="btn-view">View
+                            Full
+                            Template &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- MODULE 4 -->
+                <div id="module-4" class="module-card">
+                    <div class="module-logic">
+                        <div class="module-header">
+                            <div class="module-number">Sequence 04</div>
+                            <h2 class="module-title">Re-engagement</h2>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Trigger Condition</div>
+                            <div class="logic-content"><strong>Day 7</strong> of total inactivity (user previously
+                                showed engagement).</div>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Strategic Objective</div>
+                            <div class="logic-content">Resurrect the fading habit quietly using utility, not guilt
+                                trips.</div>
+                        </div>
+
+                        <div class="brain-box">
+                            <h4>Value Delivery via Frictionless Utility</h4>
+                            <p>Most SaaS sends a catastrophic "We miss you!" email. We don't. We send a highly
+                                targeted
+                                1-click shortcut. "While you were out, we prepared this tool for you to clear your
+                                tasks
+                                right now."</p>
+                        </div>
+                    </div>
+                    <div class="module-action">
+                        <div class="preview-snippet">
+                            <div class="snippet-subject">Need KaraX to finish something else today?</div>
+                            <div class="snippet-body">
+                                While you were away building your business, we built out a few templates to speed up
+                                your routine. 1-click execution ready...
+                            </div>
+                        </div>
+                        <a href="email_templates/4_re_engagement.html" target="_blank" class="btn-view">View Full
+                            Template &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- MODULE 5 -->
+                <div id="module-5" class="module-card">
+                    <div class="module-logic">
+                        <div class="module-header">
+                            <div class="module-number">Sequence 05</div>
+                            <h2 class="module-title">The Winback</h2>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Trigger Condition</div>
+                            <div class="logic-content"><strong>Day 30+</strong> of strict inactivity. Dead cohorts.
+                            </div>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Strategic Objective</div>
+                            <div class="logic-content">Shatter their negative impression of the product through
+                                radical
+                                transparency.</div>
+                        </div>
+
+                        <div class="brain-box">
+                            <h4>Radical Candor & Defusing Defenses</h4>
+                            <p>We know they think the app is slow because the UI confused them. We openly admit the
+                                prior onboarding was flawed. By falling on the sword, we lower software-defense
+                                fatigue
+                                and invoke intense curiosity regarding the "new engine."</p>
+                        </div>
+                    </div>
+                    <div class="module-action">
+                        <div class="preview-snippet">
+                            <div class="snippet-subject">KaraX is drastically faster than when you left.</div>
+                            <div class="snippet-body">
+                                Looking at our data, we know why you left: It took too long to get to the magic.
+                                We've
+                                completely rewritten the engine...
+                            </div>
+                        </div>
+                        <a href="email_templates/5_winback.html" target="_blank" class="btn-view">View Full Template
+                            &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- MODULE 6 -->
+                <div id="module-6" class="module-card">
+                    <div class="module-logic">
+                        <div class="module-header">
+                            <div class="module-number">Sequence 06</div>
+                            <h2 class="module-title">Loyalty Report</h2>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Trigger Condition</div>
+                            <div class="logic-content">Automated <strong>monthly send</strong> to all Pro/Paid
+                                accounts.
+                            </div>
+                        </div>
+
+                        <div class="logic-row">
+                            <div class="logic-label">Strategic Objective</div>
+                            <div class="logic-content">Protect MRR by quantifying background output and embedding
+                                Sunk
+                                Cost dependency.</div>
+                        </div>
+
+                        <div class="brain-box">
+                            <h4>Proof of Work & Sunk Cost Bias</h4>
+                            <p>When budgets shrink, invisible SaaS is cut first. This behaves like an employee
+                                performance review. If KaraX executes 400 workflows silently, turning it off means
+                                they
+                                lose a high-functioning digital employee. Canceling becomes too expensive in human
+                                capital.</p>
+                        </div>
+                    </div>
+                    <div class="module-action">
+                        <div class="preview-snippet">
+                            <div class="snippet-subject">Your {company_name} intelligence report</div>
+                            <div class="snippet-body">
+                                This month, KaraX actively sat in your meetings and operated behind the scenes to
+                                execute 412 workflows. Protect your integrations...
+                            </div>
+                        </div>
+                        <a href="email_templates/6_loyalty_report.html" target="_blank" class="btn-view">View Full
+                            Template &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>
