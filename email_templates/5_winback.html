@@ -1,74 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaraX is drastically faster than when you left</title>
+    <title>KaraX Core Engine Update: v2.4 Architecture</title>
 </head>
-
-<body
-    style="margin: 0; padding: 0; background-color: #f6f7f9; font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #111827;">
-
+<body style="margin: 0; padding: 0; background-color: #f6f7f9; font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #111827;">
     <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%"
-            style="background-color: #ffffff; border: 1px solid #eaebed; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-
-            <tr>
-                <td style="padding: 40px 40px 20px 40px;">
-                    <img src="../assets/3c2b72c9-f716-47e3-a051-6b3567fb063a.png" alt="KaraX.ai"
-                        style="height: 38px; width: auto; display: block;">
-                </td>
-            </tr>
-
-            <tr>
-                <td style="padding: 0 40px 40px 40px;">
-                    <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">Hi
-                        {{first_name}},</p>
-
-                    <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">A while ago, you
-                        tested KaraX. You didn't stick around, and looking at our behavioral data, we understand exactly
-                        why: the onboarding took too long, and getting to the actual automated value was confusing.</p>
-
-                    <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">Dropping you into
-                        a blank dashboard and expecting you to just figure it out was our mistake.</p>
-
-                    <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">We've spent the
-                        past weeks completely rewriting the execution engine. No blank canvases. No guessing prompts.
-                        Just immediate, guided execution blocks.</p>
-
-                    <p style="font-size: 16px; line-height: 26px; margin: 0 0 32px 0; color: #374151;">If you have 30
-                        seconds today, come see how smoothly the new architecture runs.</p>
-
-                    <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 0 40px 0;">
-                        <tr>
-                            <td align="center" style="border-radius: 8px; background-color: #000000;">
-                                <a href="{{cta_link}}"
-                                    style="font-size: 14px; font-weight: 500; color: #ffffff; text-decoration: none; padding: 14px 24px; display: inline-block; border-radius: 8px; border: 1px solid #000000;">Test
-                                    the updated engine &rarr;</a>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <p style="font-size: 15px; line-height: 24px; margin: 0; color: #6b7280;">Best,<br><strong
-                            style="color: #111827; font-weight: 500;">The KaraX Team</strong></p>
-                </td>
-            </tr>
-
-            <tr>
-                <td
-                    style="padding: 24px 40px; background-color: #fafbfc; border-top: 1px solid #eaebed; border-radius: 0 0 12px 12px;">
-                    <p style="margin: 0; font-size: 13px; color: #8e95a3; line-height: 20px;">
-                        KaraX.ai &middot; The Autopilot for Professionals<br>
-                        <a href="#" style="color: #6a7181; text-decoration: none;">Unsubscribe</a> &middot; <a href="#"
-                            style="color: #6a7181; text-decoration: none;">Privacy Policy</a>
-                    </p>
-                </td>
-            </tr>
-
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; border: 1px solid #eaebed; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+            <tr><td style="padding: 40px 40px 20px 40px;"><img src="../assets/3c2b72c9-f716-47e3-a051-6b3567fb063a.png" alt="KaraX.ai" style="height: 38px; width: auto; display: block;"></td></tr>
+            <tr><td style="padding: 0 40px 40px 40px;">
+                <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">Hi {{first_name}},</p>
+                <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">This quarter, we have finalized and deployed a vast overhaul of the KaraX execution engine.</p>
+                <p style="font-size: 16px; line-height: 26px; margin: 0 0 20px 0; color: #374151;">The primary engineering directive was eradicating latency between user intent and output execution. We have officially deprecated the ambiguous, unguided prompt interfaces and integrated a highly structured, accelerated task environment.</p>
+                <p style="font-size: 16px; line-height: 26px; margin: 0 0 32px 0; color: #374151;">The result is an architecture that demands drastically less manual input while delivering exact, production-grade output. The new framework is fully released and active across all accounts.</p>
+                <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 0 40px 0;"><tr><td align="center" style="border-radius: 8px; background-color: #000000;">
+                    <a href="{{cta_link}}" style="font-size: 14px; font-weight: 500; color: #ffffff; text-decoration: none; padding: 14px 24px; display: inline-block; border-radius: 8px; border: 1px solid #000000;">Experience the updated engine &rarr;</a>
+                </td></tr></table>
+                <p style="font-size: 15px; line-height: 24px; margin: 0; color: #6b7280;">Best,<br><strong style="color: #111827; font-weight: 500;">The KaraX Team</strong></p>
+            </td></tr>
+            <tr><td style="padding: 24px 40px; background-color: #fafbfc; border-top: 1px solid #eaebed; border-radius: 0 0 12px 12px;">
+                <p style="margin: 0; font-size: 13px; color: #8e95a3; line-height: 20px;">KaraX.ai &middot; The Autopilot for Professionals<br><a href="#" style="color: #6a7181; text-decoration: none;">Unsubscribe</a> &middot; <a href="#" style="color: #6a7181; text-decoration: none;">Privacy Policy</a></p>
+            </td></tr>
         </table>
     </div>
-
 </body>
-
 </html>
